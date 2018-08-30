@@ -1,0 +1,12 @@
+version: '2'
+services:
+ mongo:
+   image: mongo:3.4
+   command: --nojournal
+ orion:
+   image: fiware/orion
+   links:
+     - mongo
+   ports:
+     - "1026:1026"
+   command: -dbhost mongo
