@@ -6,7 +6,7 @@ do
     number=$(shuf -i 1-3113 -n 1)
     # echo
 
-    curl localhost:1026/v2/entities/Room1/attrs -s -S -H 'Content-Type: application/json' -X PUT -d '{
+    curl localhost:1026/v2/entities/Room1/attrs -s -S -H 'Content-Type: application/json' -X PATCH -d '{
   "temperature": {
     "value": '$temp',
     "type": "Float"

@@ -9,6 +9,10 @@ curl localhost:1026/v2/entities -s -S -H 'Content-Type: application/json' -d @- 
   "pressure": {
     "value": 720,
     "type": "Integer"
+  },
+  "temperature_min": {
+    "value": 0,
+    "type": "Float"
   }
 }
 EOF
