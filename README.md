@@ -19,8 +19,14 @@ mvn install:install-file -Dfile=$(PATH_DOWNLOAD)/orion.flink.connector-1.0.jar -
 where `PATH_DOWNLOAD` is the path where you downloaded the JAR.
 
 ## Example 1 : Receive simulated notifications
+
 The first example makes use of the `OrionSource` in order to receive notifications from the Orion Context Broker. For simplicity, in this example the notifications are simulated with a curl command.
-Specifically, the example receives a notification every second and
+Specifically, the example receives a notification every second that a node changed its temperature, and calculates the minimum temperature in a given interval.
+In order to simulate the notifications you can run the following script (available at `files/example1/curl_Notification.sh`):
+```
+//TODO
+```
+
 This is the code of the example:
 ```
 package org.fiware.cosmos.orion.flink.connector.examples.example1
@@ -47,16 +53,13 @@ object Example1{
       .keyBy("id")
       .timeWindow(Time.seconds(5), Time.seconds(2))
       .min("temperature")
-      .map(tempNode => tempNode.toString)
 
     // Print the results with a single thread, rather than in parallel
     processedDataStream.print().setParallelism(1)
     env.execute("Socket Window NgsiEvent")
   }
 
-  case class Temp_Node(id: String, temperature: Float) extends  Serializable {
-    override def toString :String = { "{\"temperature_min\": { \"value\":"+temperature+", \"type\": \"Float\"}}" }
-  }
+  case class Temp_Node(id: String, temperature: Float)
 }
 ```
 
@@ -76,13 +79,47 @@ val processedDataStream = eventStream
   .flatMap(event => event.entities)
 ```
 
-Once we have all the entities, we can iterate over them ( with map) and extract the desired attributes; in this case, it is the temperature.
+Once you have all the entities, you can iterate over them (with `map`) and extract the desired attributes; in this case, it is the temperature.
+```
+// ...
+.map(entity => {
+    val temp = entity.attrs("temperature").value.asInstanceOf[Number].floatValue()
+    new Temp_Node( entity.id, temp)
+})
 ```
 
+In each iteration you create a custom object with the properties you need: the entity id and the temperature. For this purpose, you can define a case class like so:
+```
+case class Temp_Node(id: String, temperature: Float)
 ```
 
+Now you can group the created objects by entity id and perform operations on them:
+```
+// ...
+.keyBy("id")
+```
+
+You can provide a custom processing window, like so:
+```
+// ...
+.timeWindow(Time.seconds(5), Time.seconds(2))
+```
+
+And then specify the operation to perform in said time interval:
+```
+// ...
+.min("temperature")
+```
+
+After the processing, you can print the results on the console:
+```
+processedDataStream.print().setParallelism(1)
+```
+
+Or you can persist them using the sink of your choice.
 
 ## Example 2 : Complete Orion Scenario with docker-compose
+
 The second example does the same processing as the previous one but it writes the processed data back in the Context Broker.
 In order to do it, it needs to have a Context Broker up and running. For this purpose, a `docker-compose` file is provided under `files/example2`, which deploys all the necessary containers for this scenario.
 

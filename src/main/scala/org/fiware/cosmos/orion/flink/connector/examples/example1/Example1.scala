@@ -26,14 +26,11 @@ object Example1{
       .keyBy("id")
       .timeWindow(Time.seconds(5), Time.seconds(2))
       .min("temperature")
-      .map(tempNode => tempNode.toString)
 
     // print the results with a single thread, rather than in parallel
     processedDataStream.print().setParallelism(1)
     env.execute("Socket Window NgsiEvent")
   }
 
-  case class Temp_Node(id: String, temperature: Float) extends  Serializable {
-    override def toString :String = { "{\"temperature_min\": { \"value\":"+temperature+", \"type\": \"Float\"}}" }
-  }
+  case class Temp_Node(id: String, temperature: Float)
 }
