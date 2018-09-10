@@ -22,12 +22,21 @@ where `PATH_DOWNLOAD` is the path where you downloaded the JAR.
 
 The first example makes use of the `OrionSource` in order to receive notifications from the Orion Context Broker. For simplicity, in this example the notifications are simulated with a curl command.
 Specifically, the example receives a notification every second that a node changed its temperature, and calculates the minimum temperature in a given interval.
-In order to simulate the notifications you can run the following script (available at `files/example1/curl_Notification.sh`):
+In order to simulate the notifications coming from the Context Broker you can run the following script (available at `files/example1/curl_Notification.sh`):
 ```
-//TODO
+while true
+do
+    timestamp=$(shuf -i 1-100000000 -n 1)
+    temp=$(shuf -i 18-53 -n 1)
+    number=$(shuf -i 1-3113 -n 1)
+    # echo
+
+    curl -d '{ "data": [{"id": "R1","type": "Node","co": {"type": "Float","value": 0,"metadata": {}},"co2": {"type": "Float","value": 0,"metadata": {}},"humidity": {"type": "Float","value": 40,"metadata": {}},"pressure": {"type": "Float","value": '$number',"metadata": {}},"temperature": {"type": "Float","value": '$temp',"metadata": {}},"wind_speed": {"type": "Float","value": 1.06,"metadata": {}}} ],"subscriptionId": "57458eb60962ef754e7c0998"}'   -v -s -S --header 'Content-Type: application/json; charset=utf-8' --header 'Accept: application/json' --header 'User-Agent: orion/0.10.0' --header "Fiware-Service: demo" --header "Fiware-ServicePath: /test"  -X POST http://localhost:9001
+    sleep 1
+done
 ```
 
-This is the code of the example:
+This is the code of the example which is explained step by step below:
 ```
 package org.fiware.cosmos.orion.flink.connector.examples.example1
 
@@ -122,7 +131,6 @@ Or you can persist them using the sink of your choice.
 
 The second example does the same processing as the previous one but it writes the processed data back in the Context Broker.
 In order to do it, it needs to have a Context Broker up and running. For this purpose, a `docker-compose` file is provided under `files/example2`, which deploys all the necessary containers for this scenario.
-
 
 ```
 package org.fiware.cosmos.orion.flink.connector.examples.example2
