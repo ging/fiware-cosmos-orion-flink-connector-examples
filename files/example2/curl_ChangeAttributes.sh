@@ -7,14 +7,14 @@ do
     # echo
 
     curl localhost:1026/v2/entities/Room1/attrs -s -S -H 'Content-Type: application/json' -X PATCH -d '{
-  "temperature": {
-    "value": '$temp',
-    "type": "Float"
-  },
-  "pressure": {
-    "value": '$number',
-    "type": "Float"
-  }
-}'
+      "temperature": {
+        "value": '$temp',
+        "type": "Float"
+      },
+      "pressure": {
+        "value": '$number',
+        "type": "Float"
+      }
+    }'
     sleep 1
 done

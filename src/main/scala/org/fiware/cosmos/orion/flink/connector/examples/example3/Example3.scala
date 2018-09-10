@@ -1,4 +1,4 @@
-package org.fiware.cosmos.orion.flink.connector.examples.example2
+package org.fiware.cosmos.orion.flink.connector.examples.example3
 
 
 import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
@@ -6,11 +6,11 @@ import org.apache.flink.streaming.api.windowing.time.Time
 import org.fiware.cosmos.orion.flink.connector._
 
 /**
-  * Example2 Orion Connector
+  * Example3 Orion Connector
   * @author @sonsoleslp
   */
-object Example2 {
-  final val URL_CB = "http://localhost:1026/v2/entities/"
+object Example3 {
+  final val URL_CB = "http://flinkexample_orion_1:1026/v2/entities/"
   final val CONTENT_TYPE = ContentType.JSON
   final val METHOD = HTTPMethod.POST
 

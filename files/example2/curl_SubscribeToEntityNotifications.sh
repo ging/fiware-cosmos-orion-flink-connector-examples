@@ -17,7 +17,7 @@ curl -v localhost:1026/v2/subscriptions -s -S -H 'Content-Type: application/json
   },
   "notification": {
 	"http": {
-  	"url": "http://taskmanager:9001/notify"
+  	"url": "http://$MY_IP:9001/notify"
 	},
 	"attrs": [
   	"temperature",
