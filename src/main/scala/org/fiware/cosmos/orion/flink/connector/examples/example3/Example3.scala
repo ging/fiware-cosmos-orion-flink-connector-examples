@@ -10,7 +10,7 @@ import org.fiware.cosmos.orion.flink.connector._
   * @author @sonsoleslp
   */
 object Example3 {
-  final val URL_CB = "http://flinkexample_orion_1:1026/v2/entities/"
+  final val URL_CB = "http://orion:1026/v2/entities/"
   final val CONTENT_TYPE = ContentType.JSON
   final val METHOD = HTTPMethod.POST
 

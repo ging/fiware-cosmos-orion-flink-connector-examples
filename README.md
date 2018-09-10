@@ -316,4 +316,40 @@ You can test that it has been changed in the Context Broker as well by running t
 curl localhost:1026/v2/entities/Room1
 ```
 
-### Example 3
+### Example 3: Packaging the code and submitting it to the Flink Job Manager
+In the previous examples, we've seen how to get the connector up and running from an IDE like IntelliJ. In a real case scenario, we might want to package our code and submit it to a Flink cluster in order to run our operations in parallel.
+For this matter, we need to make some changes to our code. First, we need to change the notification URL of our subscription to point to our Flink node like so (`files/example3/curl_SubscribeToEntityNotifications.sh`):
+
+```
+curl -v localhost:1026/v2/subscriptions -s -S -H 'Content-Type: application/json' -d @- <<EOF
+{
+  "description": "A subscription to get info about Room1",
+  "subject": {
+	"entities": [
+  	{
+    	"id": "Room1",
+    	"type": "Room"
+  	}
+	],
+	"condition": {
+  	"attrs": [
+    	"pressure",
+	"temperature"
+  	]
+	}
+  },
+  "notification": {
+	"http": {
+  	"url": "http://taskmanager:9001/notify"
+	},
+	"attrs": [
+  	"temperature",
+	"pressure"
+	]
+  },
+  "expires": "2040-01-01T14:00:00.00Z",
+  "throttling": 5
+}
+EOF
+```
+//TODO
