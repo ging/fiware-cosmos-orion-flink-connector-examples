@@ -22,7 +22,10 @@ where `PATH_DOWNLOAD` is the path where you downloaded the JAR.
 
 The first example makes use of the `OrionSource` in order to receive notifications from the Orion Context Broker. For simplicity, in this example the notifications are simulated with a curl command.
 Specifically, the example receives a notification every second that a node changed its temperature, and calculates the minimum temperature in a given interval.
+
+### Simulating a notification
 In order to simulate the notifications coming from the Context Broker you can run the following script (available at `files/example1/curl_Notification.sh`):
+
 ```
 while true
 do
@@ -55,6 +58,7 @@ do
 done
 ```
 
+### Receiving data and performing operations
 This is the code of the example which is explained step by step below:
 ```
 package org.fiware.cosmos.orion.flink.connector.examples.example1
@@ -150,7 +154,9 @@ Or you can persist them using the sink of your choice.
 ## Example 2 : Complete Orion Scenario with docker-compose
 
 The second example does the same processing as the previous one but it writes the processed data back in the Context Broker.
-In order to do it, it needs to have a Context Broker up and running. For this purpose, a `docker-compose` file is provided under `files/example2`, which deploys all the necessary containers for this scenario.
+
+### Setting up the scenario
+In order to test this feature, we need to have a Context Broker up and running. For this purpose, a `docker-compose` file is provided under `files/example2`, which deploys all the necessary containers for this scenario.
 You just need to run the following command (probably with `sudo`):
 ```
 docker-compose up
@@ -218,7 +224,9 @@ You might want to check that you have created it correcty by running:
 curl localhost:1026/v2/subscriptions
 ```
 
-Now you may start triggering changes in the entity's attributes. For that, you can use the following script (`files/example2/curl_ChangeAttributes.sh`):
+
+### Triggering notifications
+Now you may start performing changes in the entity's attributes. For that, you can use the following script (`files/example2/curl_ChangeAttributes.sh`):
 ```
 while true
 do
@@ -241,6 +249,7 @@ do
 done
 ```
 
+### Receiving data, performing operations and writing back to the Context Broker
 Let's take a look at the Example2 code now:
 
 ```
@@ -318,7 +327,12 @@ curl localhost:1026/v2/entities/Room1
 
 ### Example 3: Packaging the code and submitting it to the Flink Job Manager
 In the previous examples, we've seen how to get the connector up and running from an IDE like IntelliJ. In a real case scenario, we might want to package our code and submit it to a Flink cluster in order to run our operations in parallel.
-For this matter, we need to make some changes to our code. First, we need to change the notification URL of our subscription to point to our Flink node like so (`files/example3/curl_SubscribeToEntityNotifications.sh`):
+
+Follow the [**Setting up the scenario**](#setting-up-the-scenario) section if you haven't already in order to deploy the containers needed.
+After that, we need to make some changes to our code.
+
+### Subscribing to notifications
+First, we need to change the notification URL of our subscription to point to our Flink node like so (`files/example3/curl_SubscribeToEntityNotifications.sh`):
 
 ```
 curl -v localhost:1026/v2/subscriptions -s -S -H 'Content-Type: application/json' -d @- <<EOF
@@ -340,7 +354,7 @@ curl -v localhost:1026/v2/subscriptions -s -S -H 'Content-Type: application/json
   },
   "notification": {
 	"http": {
-  	"url": "http://taskmanager:9001/notify"
+  	"url": <b>"http://taskmanager:9001/notify"</b>
 	},
 	"attrs": [
   	"temperature",
@@ -352,4 +366,38 @@ curl -v localhost:1026/v2/subscriptions -s -S -H 'Content-Type: application/json
 }
 EOF
 ```
-//TODO
+
+### Modifying the Context Broker URL
+
+Since we are going to run the code from inside a Flink Task Manager container, we no longer can refer to the Context Broker as "http://localhost:1026". Instead, the code in Example 3 only differs from the previous example in the URL specified for the Context Broker: "http://orion:1026".
+
+### Packaging the code
+
+Let's build a JAR package of the example. In it, we need to include all the dependencies we have used, such as the connector, but exclude some of the dependencies provided by the environment (Flink, Scala...).
+This can be done through the `maven package` command without the `add-dependencies-for-IDEA` profile checked.
+This will build a JAR file under `target/orion.flink.connector.examples-1.0.jar`.
+
+### Submitting the job
+
+
+Let's submit the Example 3 code to the Flink cluster we have deployed. In order to do this, open the Flink GUI on the browser ([http://localhost:8081](http://localhost:8081)) and select the **Submit new Job** section on the left menu.
+Click the **Add New** button and upload the JAR. Once uploaded, select it from the **Uploaded JARs** list and specify the class to execute:
+```
+org.fiware.cosmos.orion.flink.connector.examples.example3.Example3
+```
+
+![Screenshot](https://raw.githubusercontent.com/wiki/sonsoleslp/fiware-cosmos-orion-flink-connector-examples/files/img/submit_job.jpg)
+
+
+Once filled in this field, you can click the **Submit** button and you will see that your job is running.
+Follow the section [**Triggering notifications**](#triggering-notifications)
+
+
+You can check that the vale for `temperature_min` is changing in the Context Broker by running:
+```
+curl localhost:1026/v2/entities/Room1
+```
+
+
+#### Other operations
+// TODO
