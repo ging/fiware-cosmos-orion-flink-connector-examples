@@ -400,4 +400,34 @@ curl localhost:1026/v2/entities/Room1
 
 
 #### Other operations
-// TODO
+
+The examples provided focus on how to get the connector up and running but do not give much importance to the actual operations performed on the data received. In fact, the only operation done is calculating the minimum temperature on a time window, which is already available with Flink.
+Nevertheless, Flink allows to perform custom operations such as calculating the average. For this, we need to define an `AggregateFunction` that performs this operation.
+
+```
+  class AverageAggregate extends AggregateFunction[Temp_Node, (Float,Float), Float] {
+    override def createAccumulator() = (0L, 0L)
+
+    override def add(value: (Temp_Node), accumulator: (Float, Float)) =
+      (accumulator._1 + value.temperature, accumulator._2 + 1L)
+
+    override def getResult(accumulator: (Float, Float)) = accumulator._1 / accumulator._2
+
+    override def merge(a: (Float, Float), b: (Float, Float)) =
+      (a._1 + b._1, a._2 + b._2)
+  }
+```
+
+This aggregator function takes as an input one `Temp_Node` at a time, accumulates a tuple containing the sum of the values and the count of the values, and outputs a number with the average of the temperatures in the given timespan.
+In order to associate it to our Flink DataStream we do it through the `aggregate` function.
+```
+val processedDataStream = eventStream
+      .flatMap(event => event.entities)
+      .map(entity => {
+        val temp = entity.attrs("temperature").value.asInstanceOf[Number].floatValue()
+        new Temp_Node( entity.id, temp)
+      })
+      .keyBy("id")
+      .timeWindow(Time.seconds(5), Time.seconds(2))
+      .aggregate(new AverageAggregate)
+```
