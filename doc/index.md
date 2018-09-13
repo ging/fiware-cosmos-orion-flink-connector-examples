@@ -1,8 +1,8 @@
-# Introduction
+# fiware-cosmos-orion-flink-connector-examples
 
 This repository contains a few examples for getting started with the [**fiware-cosmos-orion-flink-connector**](https://github.com/sonsoleslp/fiware-cosmos-orion-flink-connector/):
 
-# Setup
+## Setup
 
 In order to run the examples, first you need to clone the repository:
 ```
@@ -18,12 +18,12 @@ mvn install:install-file -Dfile=$(PATH_DOWNLOAD)/orion.flink.connector-1.0.jar -
 
 where `PATH_DOWNLOAD` is the path where you downloaded the JAR.
 
-# Example 1 : Receive simulated notifications
+## Example 1 : Receive simulated notifications
 
 The first example makes use of the `OrionSource` in order to receive notifications from the Orion Context Broker. For simplicity, in this example the notifications are simulated with a curl command.
 Specifically, the example receives a notification every second that a node changed its temperature, and calculates the minimum temperature in a given interval.
 
-## Simulating a notification
+### Simulating a notification
 In order to simulate the notifications coming from the Context Broker you can run the following script (available at `files/example1/curl_Notification.sh`):
 
 ```
@@ -58,7 +58,7 @@ do
 done
 ```
 
-## Receiving data and performing operations
+### Receiving data and performing operations
 This is the code of the example which is explained step by step below:
 ```
 package org.fiware.cosmos.orion.flink.connector.examples.example1
@@ -151,11 +151,11 @@ processedDataStream.print().setParallelism(1)
 Or you can persist them using the sink of your choice.
 
 
-# Example 2 : Complete Orion Scenario with docker-compose
+## Example 2 : Complete Orion Scenario with docker-compose
 
 The second example does the same processing as the previous one but it writes the processed data back in the Context Broker.
 
-## Setting up the scenario
+### Setting up the scenario
 In order to test this feature, we need to have a Context Broker up and running. For this purpose, a `docker-compose` file is provided under `files/example2`, which deploys all the necessary containers for this scenario.
 You just need to run the following command (probably with `sudo`):
 ```
@@ -225,7 +225,7 @@ curl localhost:1026/v2/subscriptions
 ```
 
 
-## Triggering notifications
+### Triggering notifications
 Now you may start performing changes in the entity's attributes. For that, you can use the following script (`files/example2/curl_ChangeAttributes.sh`):
 ```
 while true
@@ -249,7 +249,7 @@ do
 done
 ```
 
-## Receiving data, performing operations and writing back to the Context Broker
+### Receiving data, performing operations and writing back to the Context Broker
 Let's take a look at the Example2 code now:
 
 ```
@@ -311,7 +311,6 @@ After calculating the minimum temperature, the output data needs to be adapted t
 
 * **HTTP Method**: The HTTP method used for sending the update. It can be: `HTTPMethod.POST`, `HTTPMethod.PUT` or `HTTPMethod.PATCH`.
 
-
 In the example, an **`OrionSinkObject`** is built from the `Temp_Node` object converted to JSON. Thus, the specified data type is JSON. The URL is formed with the hostname of the docker container where the Context Broker is, and the id of the specific entity we are receiving data from. It uses the HTTP Post method in order to send the message to the Context Broker.
 ```
 // ...
@@ -330,13 +329,13 @@ You can test that it has been changed in the Context Broker as well by running t
 curl localhost:1026/v2/entities/Room1
 ```
 
-# Example 3: Packaging the code and submitting it to the Flink Job Manager
+## Example 3: Packaging the code and submitting it to the Flink Job Manager
 In the previous examples, we've seen how to get the connector up and running from an IDE like IntelliJ. In a real case scenario, we might want to package our code and submit it to a Flink cluster in order to run our operations in parallel.
 
 Follow the [**Setting up the scenario**](#setting-up-the-scenario) section if you haven't already in order to deploy the containers needed.
 After that, we need to make some changes to our code.
 
-## Subscribing to notifications
+### Subscribing to notifications
 First, we need to change the notification URL of our subscription to point to our Flink node like so (`files/example3/curl_SubscribeToEntityNotifications.sh`):
 
 ```
@@ -372,17 +371,17 @@ curl -v localhost:1026/v2/subscriptions -s -S -H 'Content-Type: application/json
 EOF
 ```
 
-## Modifying the Context Broker URL
+### Modifying the Context Broker URL
 
 Since we are going to run the code from inside a Flink Task Manager container, we no longer can refer to the Context Broker as "http://localhost:1026". Instead, the code in Example 3 only differs from the previous example in the URL specified for the Context Broker: "http://orion:1026".
 
-## Packaging the code
+### Packaging the code
 
 Let's build a JAR package of the example. In it, we need to include all the dependencies we have used, such as the connector, but exclude some of the dependencies provided by the environment (Flink, Scala...).
 This can be done through the `maven package` command without the `add-dependencies-for-IDEA` profile checked.
 This will build a JAR file under `target/orion.flink.connector.examples-1.0.jar`.
 
-## Submitting the job
+### Submitting the job
 
 
 Let's submit the Example 3 code to the Flink cluster we have deployed. In order to do this, open the Flink GUI on the browser ([http://localhost:8081](http://localhost:8081)) and select the **Submit new Job** section on the left menu.
@@ -404,7 +403,7 @@ curl localhost:1026/v2/entities/Room1
 ```
 
 
-# Other operations
+## Other operations
 
 The examples provided focus on how to get the connector up and running but do not give much importance to the actual operations performed on the data received. In fact, the only operation done is calculating the minimum temperature on a time window, which is already available with Flink.
 Nevertheless, Flink allows to perform custom operations such as calculating the average. For this, we need to define an `AggregateFunction` that performs this operation.
