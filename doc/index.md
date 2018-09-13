@@ -325,7 +325,7 @@ You can test that it has been changed in the Context Broker as well by running t
 curl localhost:1026/v2/entities/Room1
 ```
 
-### Example 3: Packaging the code and submitting it to the Flink Job Manager
+## Example 3: Packaging the code and submitting it to the Flink Job Manager
 In the previous examples, we've seen how to get the connector up and running from an IDE like IntelliJ. In a real case scenario, we might want to package our code and submit it to a Flink cluster in order to run our operations in parallel.
 
 Follow the [**Setting up the scenario**](#setting-up-the-scenario) section if you haven't already in order to deploy the containers needed.
