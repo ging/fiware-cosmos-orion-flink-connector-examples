@@ -302,10 +302,15 @@ object Example2 {
 
 As you can see, it is very similar to the previous example. The main difference is that it writes the processed data back in the Context Broker through the **`OrionSink`**.
 After calculating the minimum temperature, the output data needs to be adapted to the format accepted by the **`OrionSink`**. It accepts a stream of **`OrionSinkObject`**, which accepts 4 arguments:
+
 * **Message**: It is the content of the update that is going to be sent to the Context Broker. It can be a single value converted to string or, more commonly, a stringified JSON containing the new data. The connector does not build the JSON from a Scala object for us; we need to build it ourselves. We may want to override the `toString` message of the case class we've created in order to facilitate this process, as seen on the example.
+
 * **URL**: It is the URL to which the message will be posted. Normally it has a common base but it somewhat varies depending on the entity we're receiving data from.
+
 * **Content Type**: Whether the message is in JSON format (`ContentType.JSON`) or in plain text (`ContentType.Plain`).
+
 * **HTTP Method**: The HTTP method used for sending the update. It can be: `HTTPMethod.POST`, `HTTPMethod.PUT` or `HTTPMethod.PATCH`.
+
 
 In the example, an **`OrionSinkObject`** is built from the `Temp_Node` object converted to JSON. Thus, the specified data type is JSON. The URL is formed with the hostname of the docker container where the Context Broker is, and the id of the specific entity we are receiving data from. It uses the HTTP Post method in order to send the message to the Context Broker.
 ```
