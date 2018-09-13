@@ -399,7 +399,7 @@ curl localhost:1026/v2/entities/Room1
 ```
 
 
-#### Other operations
+## Other operations
 
 The examples provided focus on how to get the connector up and running but do not give much importance to the actual operations performed on the data received. In fact, the only operation done is calculating the minimum temperature on a time window, which is already available with Flink.
 Nevertheless, Flink allows to perform custom operations such as calculating the average. For this, we need to define an `AggregateFunction` that performs this operation.
