@@ -1,16 +1,15 @@
-package org.fiware.cosmos.orion.flink.connector.examples.example1
+package org.fiware.cosmos.orion.flink.connector.examples.example4
 
 import org.apache.flink.api.common.functions.AggregateFunction
-import org.apache.flink.streaming.api.functions.AscendingTimestampExtractor
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
-import org.fiware.cosmos.orion.flink.connector.{NgsiEvent, OrionSource}
+import org.fiware.cosmos.orion.flink.connector.OrionSource
 
 /**
-  * Example1 Orion Connector
+  * Example4 Orion Connector
   * @author @sonsoleslp
   */
-object Example1_avg{
+object Example4{
 
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
