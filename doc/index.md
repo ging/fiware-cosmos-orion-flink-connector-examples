@@ -403,7 +403,7 @@ curl localhost:1026/v2/entities/Room1
 ```
 
 
-## Other operations
+## Example 4: Other operations
 
 The examples provided focus on how to get the connector up and running but do not give much importance to the actual operations performed on the data received. In fact, the only operation done is calculating the minimum temperature on a time window, which is already available with Flink.
 Nevertheless, Flink allows to perform custom operations such as calculating the average. For this, we need to define an `AggregateFunction` that performs this operation.
@@ -434,4 +434,99 @@ val processedDataStream = eventStream
       .keyBy("id")
       .timeWindow(Time.seconds(5), Time.seconds(2))
       .aggregate(new AverageAggregate)
+```
+
+## Example 5: Structured values for attributes
+
+So far, the examples provided have dealt with simple attributes in the shape of integers or strings. Some use cases require more complex attributes, such as objects (https://fiware-orion.readthedocs.io/en/master/user/structured_attribute_valued/index.html).
+This connector parses this sort of values as scala Maps[String,Any], which eases the process of iterating through their properties.
+
+Example 5 provides an example in which the data received is a list of bus schedules and their prices. These prices are constantly changing and Flink is used in order to calculate the minimum prices within a time window.
+
+The simulated Orion notification is as follows (available at `files/example5/curl_Notification.sh`):
+```
+while true
+do
+    bus1=$(shuf -i 10-53 -n 1)
+    bus2=$(shuf -i 10-44 -n 1)
+
+    curl -v -s -S X POST http://localhost:9001 \
+    --header 'Content-Type: application/json; charset=utf-8' \
+    --header 'Accept: application/json' \
+    --header 'User-Agent: orion/0.10.0' \
+    --header "Fiware-Service: demo" \
+    --header "Fiware-ServicePath: /test" \
+    -d  '{
+         "data": [
+             {
+                 "id": "R1",
+                 "type": "Node",
+                 "information": {
+                     "type": "object",
+                     "value": {
+                        "buses":[
+                            {
+                                "name": "BusCompany1",
+                                "schedule": {
+                                    "morning": [7,9,11],
+                                    "afternoon": [13,15,17,19],
+                                    "night" : [23,1,5]
+                                },
+                                "price": '$bus1'
+                            },
+                            {
+                                "name": "BusCompany2",
+                                "schedule": {
+                                    "morning": [8,10,12],
+                                    "afternoon": [16,20],
+                                    "night" : [23]
+                                },
+                                "price": '$bus2'
+                            }
+                        ]
+                     },
+                     "metadata": {}
+                    }
+             }
+         ],
+         "subscriptionId": "57458eb60962ef754e7c0998"
+     }'
+
+
+    sleep 1
+done
+```
+
+The code for Example 5 is similar to the previous examples. The only difference is that it is necessary to manually parse every item of the object attribute in order to make use of it.
+
+```
+object Example5{
+
+  def main(args: Array[String]): Unit = {
+    val env = StreamExecutionEnvironment.getExecutionEnvironment
+    // Create Orion Source. Receive notifications on port 9001
+    val eventStream = env.addSource(new OrionSource(9001))
+    // Process event stream
+    val processedDataStream = eventStream
+      .flatMap(event => event.entities)
+      .map(entity => {
+        entity.attrs("information").value.asInstanceOf[Map[String, Any]]
+      })
+      .map(list => list("buses").asInstanceOf[List[Map[String,Any]]])
+      .flatMap(bus => bus )
+      .map(bus =>
+        new Bus(bus("name").asInstanceOf[String], bus("price").asInstanceOf[ scala.math.BigInt].intValue()))
+      .keyBy("name")
+      .timeWindow(Time.seconds(5), Time.seconds(2))
+      .min("price")
+
+    // print the results with a single thread, rather than in parallel
+
+    processedDataStream.print().setParallelism(1)
+
+    env.execute("Socket Window NgsiEvent")
+  }
+  case class Bus(name: String,  price: Int)
+}
+
 ```

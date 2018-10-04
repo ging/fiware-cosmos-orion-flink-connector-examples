@@ -1,7 +1,7 @@
 while true
 do
-    temp=$(shuf -i 18-53 -n 1)
-    number=$(shuf -i 1-3113 -n 1)
+    bus1=$(shuf -i 10-53 -n 1)
+    bus2=$(shuf -i 10-44 -n 1)
 
     curl -v -s -S X POST http://localhost:9001 \
     --header 'Content-Type: application/json; charset=utf-8' \
@@ -25,7 +25,7 @@ do
                                     "afternoon": [13,15,17,19],
                                     "night" : [23,1,5]
                                 },
-                                "price": 19
+                                "price": '$bus1'
                             },
                             {
                                 "name": "BusCompany2",
@@ -34,7 +34,7 @@ do
                                     "afternoon": [16,20],
                                     "night" : [23]
                                 },
-                                "price": 14
+                                "price": '$bus2'
                             }
                         ]
                      },

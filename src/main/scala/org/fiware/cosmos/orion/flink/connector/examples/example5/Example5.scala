@@ -15,7 +15,6 @@ object Example5{
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     // Create Orion Source. Receive notifications on port 9001
     val eventStream = env.addSource(new OrionSource(9001))
-
     // Process event stream
     val processedDataStream = eventStream
       .flatMap(event => event.entities)
@@ -23,13 +22,12 @@ object Example5{
         entity.attrs("information").value.asInstanceOf[Map[String, Any]]
       })
       .map(list => list("buses").asInstanceOf[List[Map[String,Any]]])
-        .flatMap(bus  => bus )
-          .map(bus =>  new Bus(bus("name").asInstanceOf[String],
-            bus("schedule").asInstanceOf[ Map[String, List[ scala.math.BigInt]]],
-            bus("price").asInstanceOf[ scala.math.BigInt]))
-          .keyBy("name")
-          .timeWindow(Time.seconds(5), Time.seconds(2))
-          .min("price")
+      .flatMap(bus => bus )
+      .map(bus =>
+        new Bus(bus("name").asInstanceOf[String], bus("price").asInstanceOf[ scala.math.BigInt].intValue()))
+      .keyBy("name")
+      .timeWindow(Time.seconds(5), Time.seconds(2))
+      .min("price")
 
     // print the results with a single thread, rather than in parallel
 
@@ -37,6 +35,5 @@ object Example5{
 
     env.execute("Socket Window NgsiEvent")
   }
-  case class Bus(name: String, schedule: Map[String, List[ scala.math.BigInt]], price:  scala.math.BigInt)
-
+  case class Bus(name: String,  price: Int)
 }
