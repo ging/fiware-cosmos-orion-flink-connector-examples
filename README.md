@@ -107,7 +107,7 @@ val eventStream = env.addSource(new OrionSource(9001))
 ```
 
 The `OrionSource` accepts a port number as a parameter. The data received from this source is a `DataStream` of `NgsiEvent` objects.
-You can check the details of this object in the [connector docs](https://github.com/ging/fiware-cosmos-orion-flink-connector/blob/master/README.md#orionsource)
+You can check the details of this object in the [connector docs](https://github.com/ging/fiware-cosmos-orion-flink-connector/blob/master/README.md#orionsource).
 
 In the example, the first step of the processing is flat-mapping the entities. This operation is performed in order to put together the entity objects of severall NGSI Events.
 
@@ -320,7 +320,7 @@ In the example, an **`OrionSinkObject`** is built from the `Temp_Node` object co
     OrionSinkObject(tempNode.toString, url, CONTENT_TYPE, METHOD)
 })
 ```
-Finally, we send the processed DataStream through the OrionSink
+Finally, we send the processed DataStream through the OrionSink.
 ```scala
 OrionSink.addSink( processedDataStream )
 ```
@@ -395,7 +395,7 @@ org.fiware.cosmos.orion.flink.connector.examples.example3.Example3
 
 
 Once filled in this field, you can click the **Submit** button and you will see that your job is running.
-Follow the section [**Triggering notifications**](#triggering-notifications)
+Follow the section [**Triggering notifications**](#triggering-notifications).
 
 
 You can check that the vale for `temperature_min` is changing in the Context Broker by running:
