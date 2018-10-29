@@ -1,16 +1,21 @@
 # fiware-cosmos-orion-flink-connector-examples
 
-This repository contains a few examples for getting started with the [**fiware-cosmos-orion-flink-connector**](https://github.com/sonsoleslp/fiware-cosmos-orion-flink-connector/):
+[![](https://img.shields.io/badge/FIWARE-Processing\Analysis-88a1ce.svg?label=FIWARE&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAVCAYAAAC33pUlAAAABHNCSVQICAgIfAhkiAAAA8NJREFUSEuVlUtIFlEUx+eO+j3Uz8wSLLJ3pBiBUljRu1WLCAKXbXpQEUFERSQF0aKVFAUVrSJalNXGgmphFEhQiZEIPQwKLbEUK7VvZrRvbr8zzjfNl4/swplz7rn/8z/33HtmRhn/MWzbXmloHVeG0a+VSmAXorXS+oehVD9+0zDN9mgk8n0sWtYnHo5tT9daH4BsM+THQC8naK02jCZ83/HlKaVSzBey1sm8BP9nnUpdjOfl/Qyzj5ust6cnO5FItJLoJqB6yJ4QuNcjVOohegpihshS4F6S7DTVVlNtFFxzNBa7kcaEwUGcbVnH8xOJD67WG9n1NILuKtOsQG9FngOc+lciic1iQ8uQGhJ1kVAKKXUs60RoQ5km93IfaREvuoFj7PZsy9rGXE9G/NhBsDOJ63Acp1J82eFU7OIVO1OxWGwpSU5hb0GqfMydMHYSdiMVnncNY5Vy3VbwRUEydvEaRxmAOSSqJMlJISTxS9YWTYLcg3B253xsPkc5lXk3XLlwrPLuDPKDqDIutzYaj3eweMkPeCCahO3+fEIF8SfLtg/5oI3Mh0ylKM4YRBaYzuBgPuRnBYD3mmhA1X5Aka8NKl4nNz7BaKTzSgsLCzWbvyo4eK9r15WwLKRAmmCXXDoA1kaG2F4jWFbgkxUnlcrB/xj5iHxFPiBN4JekY4nZ6ccOiQ87hgwhe+TOdogT1nfpgEDTvYAucIwHxBfNyhpGrR+F8x00WD33VCNTOr/Wd+9C51Ben7S0ZJUq3qZJ2OkZz+cL87ZfWuePlwRcHZjeUMxFwTrJZAJfSvyWZc1VgORTY8rBcubetdiOk+CO+jPOcCRTF+oZ0okUIyuQeSNL/lPrulg8flhmJHmE2gBpE9xrJNkwpN4rQIIyujGoELCQz8ggG38iGzjKkXufJ2Klun1iu65bnJub2yut3xbEK3UvsDEInCmvA6YjMeE1bCn8F9JBe1eAnS2JksmkIlEDfi8R46kkEkMWdqOv+AvS9rcp2bvk8OAESvgox7h4aWNMLd32jSMLvuwDAwORSE7Oe3ZRKrFwvYGrPOBJ2nZ20Op/mqKNzgraOTPt6Bnx5citUINIczX/jUw3xGL2+ia8KAvsvp0ePoL5hXkXO5YvQYSFAiqcJX8E/gyX8QUvv8eh9XUq3h7mE9tLJoNKqnhHXmCO+dtJ4ybSkH1jc9XRaHTMz1tATBe2UEkeAdKu/zWIkUbZxD+veLxEQhhUFmbnvOezsJrk+zmqMo6vIL2OXzPvQ8v7dgtpoQnkF/LP8Ruu9zXdJHg4igAAAABJRU5ErkJgggA=)](https://www.fiware.org/developers/catalogue/)
+![License](https://img.shields.io/github/license/ging/fiware-cosmos-orion-flink-connector-examples.svg)
+[![Documentation badge](https://readthedocs.org/projects/fiware-cosmos-flink-examples/badge/?version=latest)](http://fiware-cosmos-flink-examples.rtfd.io)
+[![](https://img.shields.io/badge/tag-fiware--cosmos-orange.svg?logo=stackoverflow)](http://stackoverflow.com/questions/tagged/fiware-cosmos)
+
+This repository contains a few examples for getting started with the [**fiware-cosmos-orion-flink-connector**](https://github.com/ging/fiware-cosmos-orion-flink-connector/):
 
 ## Setup
 
 In order to run the examples, first you need to clone the repository:
 ```
-git clone https://github.com/sonsoleslp/fiware-cosmos-orion-flink-connector
+git clone https://github.com/ging/fiware-cosmos-orion-flink-connector
 cd fiware-cosmos-orion-flink-connector
 ```
 
-Next, [download](https://github.com/sonsoleslp/fiware-cosmos-orion-flink-connector/releases/tag/1.0) the connector JAR from the connector repository and from the `fiware-cosmos-orion-flink-connector` run:
+Next, [download](https://github.com/ging/fiware-cosmos-orion-flink-connector/releases/tag/1.0) the connector JAR from the connector repository and from the `fiware-cosmos-orion-flink-connector` run:
 
 ```
 mvn install:install-file -Dfile=$(PATH_DOWNLOAD)/orion.flink.connector-1.0.jar -DgroupId=org.fiware.cosmos -DartifactId=orion.flink.connector -Dversion=1.0 -Dpackaging=jar
@@ -102,7 +107,7 @@ val eventStream = env.addSource(new OrionSource(9001))
 ```
 
 The `OrionSource` accepts a port number as a parameter. The data received from this source is a `DataStream` of `NgsiEvent` objects.
-You can check the details of this object in the [connector docs](https://github.com/sonsoleslp/fiware-cosmos-orion-flink-connector/blob/master/README.md#orionsource)
+You can check the details of this object in the [connector docs](https://github.com/ging/fiware-cosmos-orion-flink-connector/blob/master/README.md#orionsource).
 
 In the example, the first step of the processing is flat-mapping the entities. This operation is performed in order to put together the entity objects of severall NGSI Events.
 
@@ -315,7 +320,7 @@ In the example, an **`OrionSinkObject`** is built from the `Temp_Node` object co
     OrionSinkObject(tempNode.toString, url, CONTENT_TYPE, METHOD)
 })
 ```
-Finally, we send the processed DataStream through the OrionSink
+Finally, we send the processed DataStream through the OrionSink.
 ```scala
 OrionSink.addSink( processedDataStream )
 ```
@@ -386,11 +391,11 @@ Click the **Add New** button and upload the JAR. Once uploaded, select it from t
 org.fiware.cosmos.orion.flink.connector.examples.example3.Example3
 ```
 
-![Screenshot](https://raw.githubusercontent.com/sonsoleslp/fiware-cosmos-orion-flink-connector-examples/master/files/img/submit_job.png)
+![Screenshot](https://raw.githubusercontent.com/ging/fiware-cosmos-orion-flink-connector-examples/master/files/img/submit_job.png)
 
 
 Once filled in this field, you can click the **Submit** button and you will see that your job is running.
-Follow the section [**Triggering notifications**](#triggering-notifications)
+Follow the section [**Triggering notifications**](#triggering-notifications).
 
 
 You can check that the vale for `temperature_min` is changing in the Context Broker by running:
