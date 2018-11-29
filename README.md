@@ -7,6 +7,19 @@
 
 This repository contains a few examples for getting started with the [**fiware-cosmos-orion-flink-connector**](https://github.com/ging/fiware-cosmos-orion-flink-connector/):
 
+
+## Content
+
+-   [Setup](#what-is-cosmos)
+-   [Example 1: Receiving simulated notifications](#example-1:-receiving simulated notifications)
+-   [Example 2: Complete Orion Scenario with docker-compose](#example-2:-complete-Orion-Scenario-with-docker-compose)
+-   [Example 3: Packaging the code and submitting it to the Flink Job Manager](#example-3:-Packaging-the-code-and-submitting-it-to-the-flink-job-manager)
+-   [Example 4: Other operations](#example-4:-other-operations)
+-   [Example 5: Structured values for attributes](#example-5:-structured-values-for-attributes)
+
+---
+
+
 ## Setup
 
 In order to run the examples, first you need to clone the repository:
@@ -23,7 +36,7 @@ mvn install:install-file -Dfile=$(PATH_DOWNLOAD)/orion.flink.connector-1.0.jar -
 
 where `PATH_DOWNLOAD` is the path where you downloaded the JAR.
 
-## Example 1 : Receiving simulated notifications
+## Example 1: Receiving simulated notifications
 
 The first example makes use of the `OrionSource` in order to receive notifications from the Orion Context Broker. For simplicity, in this example the notifications are simulated with a curl command.
 Specifically, the example receives a notification every second that a node changed its temperature, and calculates the minimum temperature in a given interval.
@@ -156,7 +169,7 @@ processedDataStream.print().setParallelism(1)
 Or you can persist them using the sink of your choice.
 
 
-## Example 2 : Complete Orion Scenario with docker-compose
+## Example 2: Complete Orion Scenario with docker-compose
 
 The second example does the same processing as the previous one but it writes the processed data back in the Context Broker.
 
