@@ -11,8 +11,8 @@ This repository contains a few examples for getting started with the [**fiware-c
 
 In order to run the examples, first you need to clone the repository:
 ```
-git clone https://github.com/ging/fiware-cosmos-orion-flink-connector
-cd fiware-cosmos-orion-flink-connector
+git clone https://github.com/ging/fiware-cosmos-orion-flink-connector-examples
+cd fiware-cosmos-orion-flink-connector-examples
 ```
 
 Next, [download](https://github.com/ging/fiware-cosmos-orion-flink-connector/releases/tag/1.0) the connector JAR from the connector repository and from the `fiware-cosmos-orion-flink-connector` run:
