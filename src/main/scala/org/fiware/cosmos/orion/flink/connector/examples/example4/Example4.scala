@@ -31,7 +31,7 @@ object Example4{
 
     processedDataStream.print().setParallelism(1)
 
-    env.execute("Socket Window NgsiEvent")
+    env.execute("FIWARE Cosmos Example")
   }
 
   case class Temp_Node(id: String, temperature: Float)

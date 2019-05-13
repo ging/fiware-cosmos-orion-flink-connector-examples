@@ -28,10 +28,10 @@ git clone https://github.com/ging/fiware-cosmos-orion-flink-connector-examples
 cd fiware-cosmos-orion-flink-connector-examples
 ```
 
-Next, [download](https://github.com/ging/fiware-cosmos-orion-flink-connector/releases/tag/FIWARE_7.6) the connector JAR from the connector repository and from the `fiware-cosmos-orion-flink-connector` run:
+Next, [download](https://github.com/ging/fiware-cosmos-orion-flink-connector/releases/latest) the connector JAR from the connector repository and from the `fiware-cosmos-orion-flink-connector` run:
 
 ```
-mvn install:install-file -Dfile=$(PATH_DOWNLOAD)/orion.flink.connector-1.0.jar -DgroupId=org.fiware.cosmos -DartifactId=orion.flink.connector -Dversion=1.0 -Dpackaging=jar
+mvn install:install-file -Dfile=$(PATH_DOWNLOAD)/orion.flink.connector-1.1.0.jar -DgroupId=org.fiware.cosmos -DartifactId=orion.flink.connector -Dversion=1.1.0 -Dpackaging=jar
 ```
 
 where `PATH_DOWNLOAD` is the path where you downloaded the JAR.
@@ -106,7 +106,7 @@ object Example1{
 
     // Print the results with a single thread, rather than in parallel
     processedDataStream.print().setParallelism(1)
-    env.execute("Socket Window NgsiEvent")
+    env.execute("FIWARE Cosmos Example")
   }
 
   case class Temp_Node(id: String, temperature: Float)
@@ -309,7 +309,7 @@ object Example2 {
 
     // print the results with a single thread, rather than in parallel
     processedDataStream.map(orionSinkObject => orionSinkObject.content).print().setParallelism(1)
-    env.execute("Socket Window NgsiEvent")
+    env.execute("FIWARE Cosmos Example")
   }
 
   case class Temp_Node(id: String, temperature: Float) extends  Serializable {
@@ -393,7 +393,7 @@ Since we are going to run the code from inside a Flink Task Manager container, w
 
 Let's build a JAR package of the example. In it, we need to include all the dependencies we have used, such as the connector, but exclude some of the dependencies provided by the environment (Flink, Scala...).
 This can be done through the `maven package` command without the `add-dependencies-for-IDEA` profile checked.
-This will build a JAR file under `target/orion.flink.connector.examples-1.0.jar`.
+This will build a JAR file under `target/orion.flink.connector.examples-1.1.0.jar`.
 
 ### Submitting the job
 
@@ -538,7 +538,7 @@ object Example5{
 
     processedDataStream.print().setParallelism(1)
 
-    env.execute("Socket Window NgsiEvent")
+    env.execute("FIWARE Cosmos Example")
   }
   case class Bus(name: String,  price: Int)
 }

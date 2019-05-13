@@ -43,7 +43,7 @@ object Example2 {
 
     // print the results with a single thread, rather than in parallel
     processedDataStream.map(orionSinkObject => orionSinkObject.content).print().setParallelism(1)
-    env.execute("Socket Window NgsiEvent")
+    env.execute("FIWARE Cosmos Example")
   }
 
   case class Temp_Node(id: String, temperature: Float) extends  Serializable {

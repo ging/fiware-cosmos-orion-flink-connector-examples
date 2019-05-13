@@ -33,7 +33,7 @@ object Example5{
 
     processedDataStream.print().setParallelism(1)
 
-    env.execute("Socket Window NgsiEvent")
+    env.execute("FIWARE Cosmos Example")
   }
   case class Bus(name: String,  price: Int)
 }

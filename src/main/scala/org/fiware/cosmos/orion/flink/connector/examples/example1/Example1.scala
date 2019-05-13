@@ -29,7 +29,7 @@ object Example1{
 
     // print the results with a single thread, rather than in parallel
     processedDataStream.print().setParallelism(1)
-    env.execute("Socket Window NgsiEvent")
+    env.execute("FIWARE Cosmos Example")
   }
 
   case class Temp_Node(id: String, temperature: Float)
