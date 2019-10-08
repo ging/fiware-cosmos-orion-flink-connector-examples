@@ -21,7 +21,7 @@ object Example1{
       .flatMap(event => event.entities)
       .map(entity => {
         val temp = entity.attrs("temperature").value.asInstanceOf[Number].floatValue()
-        new Temp_Node( entity.id, temp)
+        new Temp_Node(entity.id, temp)
       })
       .keyBy("id")
       .timeWindow(Time.seconds(5), Time.seconds(2))
