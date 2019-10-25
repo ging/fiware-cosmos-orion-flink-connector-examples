@@ -31,7 +31,7 @@ cd fiware-cosmos-orion-flink-connector-examples
 Next, [download](https://github.com/ging/fiware-cosmos-orion-flink-connector/releases/latest) the connector JAR from the connector repository and from the `fiware-cosmos-orion-flink-connector` run:
 
 ```
-mvn install:install-file -Dfile=$(PATH_DOWNLOAD)/orion.flink.connector-1.2.0.jar -DgroupId=org.fiware.cosmos -DartifactId=orion.flink.connector -Dversion=1.2.0 -Dpackaging=jar
+mvn install:install-file -Dfile=$(PATH_DOWNLOAD)/orion.flink.connector-1.2.1.jar -DgroupId=org.fiware.cosmos -DartifactId=orion.flink.connector -Dversion=1.2.1 -Dpackaging=jar
 ```
 
 where `PATH_DOWNLOAD` is the path where you downloaded the JAR.
