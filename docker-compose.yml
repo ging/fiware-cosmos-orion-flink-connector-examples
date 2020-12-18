@@ -11,7 +11,7 @@ services:
      - "1026:1026"
    command: -dbhost mongo
  jobmanager:
-   image: flink:1.5.3-hadoop24-scala_2.11
+   image: flink:1.9.0-scala_2.11
    expose:
      - "6123"
    ports:
@@ -21,7 +21,7 @@ services:
      - JOB_MANAGER_RPC_ADDRESS=jobmanager
 
  taskmanager:
-   image: flink:1.5.3-hadoop24-scala_2.11
+   image: flink:1.9.0-scala_2.11
    expose:
      - "6121"
      - "6122"
